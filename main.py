@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, RootModel
 import google.generativeai as genai
 import instructor
-from sample_logs import task_adobe__spectrum_web_components_5118
+from sample_logs import SAMPLE_LOG
 
 load_dotenv()
 
@@ -38,10 +38,11 @@ We are looking for actual test names not test files.
 If you think all tests passed, set all_success to true, even if you cannot find individual test results.
 If you think all tests failed, set all_failed to true, even if you cannot find individual test results.
 
-Log: {task_adobe__spectrum_web_components_5118}
+Log: {SAMPLE_LOG}
 
 It is essential for the test names to be actual test names, not test files, not test suites, not a test runner, etc.
 If there is an error preventing the test from running, and we cannot find any test results, all_failed should be true.
+Sometimes the same test name is used in different test files or suites or test sections, in this case prefix the test name with the file name or suite name or test section name.
     """
 
     response: LogParsedResults = client.chat.completions.create(
@@ -57,6 +58,8 @@ If there is an error preventing the test from running, and we cannot find any te
     print(f"Failed count: {failed_count}")
     print(f"All success: {response_dict['all_success']}")
     print(f"All failed: {response_dict['all_failed']}")
+    test_results = {key: value.value for key, value in response_dict['test_results'].items()}
+    print(f"Test results: {test_results}")
 
 if __name__ == "__main__":
     main()
